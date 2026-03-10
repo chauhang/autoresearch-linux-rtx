@@ -1203,6 +1203,7 @@ def main():
     parser.add_argument("--matrix-lr", type=float, default=None, help="Override MATRIX_LR.")
     parser.add_argument("--embedding-lr", type=float, default=None, help="Override EMBEDDING_LR.")
     parser.add_argument("--weight-decay", type=float, default=None, help="Override WEIGHT_DECAY.")
+    parser.add_argument("--warmdown-ratio", type=float, default=None, help="Override WARMDOWN_RATIO.")
     args = parser.parse_args()
     depth = args.depth if args.depth is not None else DEPTH
     if args.aspect_ratio is not None:
@@ -1217,6 +1218,9 @@ def main():
     if args.weight_decay is not None:
         global WEIGHT_DECAY
         WEIGHT_DECAY = args.weight_decay
+    if args.warmdown_ratio is not None:
+        global WARMDOWN_RATIO
+        WARMDOWN_RATIO = args.warmdown_ratio
 
     runtime = detect_runtime()
     print(f"GPU: {runtime.gpu_name}")
