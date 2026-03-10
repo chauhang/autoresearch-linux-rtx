@@ -269,8 +269,12 @@ def detect_runtime():
     if hasattr(torch.backends, "cudnn"):
         torch.backends.cudnn.allow_tf32 = tf32_enabled
 
-    use_compile = False
-    print("torch.compile disabled in this fork runtime path.")
+    is_linux = platform.system().lower() == "linux"
+    use_compile = is_linux
+    if use_compile:
+        print("torch.compile enabled (Linux path).")
+    else:
+        print("torch.compile disabled in this fork runtime path.")
     attention_backend = "sdpa"
     print("Using PyTorch SDPA attention backend.")
     force_checkpointing = os.environ.get("AUTORESEARCH_FORCE_CHECKPOINTING")
@@ -303,6 +307,8 @@ MUON_COMPUTE_DTYPE = torch.bfloat16
 
 
 def _maybe_compile(obj, **kwargs):
+    if USE_COMPILE:
+        return torch.compile(obj, **kwargs)
     return obj
 
 
@@ -1027,7 +1033,7 @@ def _configure_step_kernels(runtime):
     ADAMW_STEP_IMPL = adamw_step_fused
     MUON_STEP_IMPL = muon_step_fused
     MUON_COMPUTE_DTYPE = runtime.amp_dtype
-    USE_COMPILE = False
+    USE_COMPILE = runtime.use_compile
 
 
 def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test):
