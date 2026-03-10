@@ -7,3 +7,5 @@ commit	val_bpb	memory_gb	status	description
 3bb451d	0.775165	2.3	keep	WARMDOWN_RATIO 0.5->0.3: GPU1 result (best)
 cb6bd98	0.769305	2.3	keep	WARMDOWN=0.2 DEPTH=4 GPU0
 cb6bd98	0.757124	2.2	keep	WARMDOWN=0.2 DEPTH=3 GPU1 (new best)
+c4f7175	0.751611	2.2	keep	WARMDOWN=0.1 DEPTH=3 GPU0
+c4f7175	0.707381	2.1	keep	WARMDOWN=0.1 DEPTH=2 GPU1 (best: 137 steps)
