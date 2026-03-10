@@ -19,3 +19,5 @@ bcb07dd	0.707828	8.2	discard	MATRIX_LR=0.06 GPU0 (131 steps, slow due to gnome-r
 bcb07dd	0.697069	8.2	keep	MATRIX_LR=0.06 GPU1 (141 steps, new best)
 0f7248b	0.703234	8.2	discard	MATRIX_LR=0.08 n_embd=128 GPU0 (slower, fewer steps)
 0f7248b	0.677509	8.4	keep	ASPECT_RATIO=128 n_embd=256 LR=0.06 GPU1 (96 steps 50M tok NEW BEST)
+cc1f947	0.676671	8.4	keep	MATRIX_LR=0.08 n_embd=256 GPU0 (95 steps new best)
+cc1f947	0.692597	8.5	discard	DEPTH=3 n_embd=256 LR=0.06 GPU1 (76 steps fewer tokens worse)
