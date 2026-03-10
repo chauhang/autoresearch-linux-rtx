@@ -269,12 +269,8 @@ def detect_runtime():
     if hasattr(torch.backends, "cudnn"):
         torch.backends.cudnn.allow_tf32 = tf32_enabled
 
-    is_linux = platform.system().lower() == "linux"
-    use_compile = is_linux
-    if use_compile:
-        print("torch.compile enabled (Linux path).")
-    else:
-        print("torch.compile disabled in this fork runtime path.")
+    use_compile = False
+    print("torch.compile disabled in this fork runtime path.")
     attention_backend = "sdpa"
     print("Using PyTorch SDPA attention backend.")
     force_checkpointing = os.environ.get("AUTORESEARCH_FORCE_CHECKPOINTING")
@@ -307,8 +303,6 @@ MUON_COMPUTE_DTYPE = torch.bfloat16
 
 
 def _maybe_compile(obj, **kwargs):
-    if USE_COMPILE:
-        return torch.compile(obj, **kwargs)
     return obj
 
 
@@ -810,7 +804,7 @@ WARMDOWN_RATIO = 0.5
 FINAL_LR_FRAC = 0.0
 
 # Model size + memory defaults
-DEPTH = 8
+DEPTH = 6
 DEVICE_BATCH_SIZE = 16
 EVAL_BATCH_SIZE = 8
 
@@ -1033,7 +1027,7 @@ def _configure_step_kernels(runtime):
     ADAMW_STEP_IMPL = adamw_step_fused
     MUON_STEP_IMPL = muon_step_fused
     MUON_COMPUTE_DTYPE = runtime.amp_dtype
-    USE_COMPILE = runtime.use_compile
+    USE_COMPILE = False
 
 
 def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test):
@@ -1204,7 +1198,9 @@ def main():
     parser = argparse.ArgumentParser(description="Autoresearch training script")
     parser.add_argument("--smoke-test", action="store_true", help="Run a short train/eval pass for validation.")
     parser.add_argument("--dataset", choices=DATASET_CHOICES, default=None, help="Optional dataset override.")
+    parser.add_argument("--depth", type=int, default=None, help="Override model depth (number of layers).")
     args = parser.parse_args()
+    depth = args.depth if args.depth is not None else DEPTH
 
     runtime = detect_runtime()
     print(f"GPU: {runtime.gpu_name}")
@@ -1235,7 +1231,7 @@ def main():
     chosen_checkpointing = None
     for train_batch_size, use_checkpointing in train_candidates:
         config = build_model_config(
-            DEPTH,
+            depth,
             vocab_size,
             runtime,
             use_activation_checkpointing=use_checkpointing,
@@ -1338,7 +1334,7 @@ def main():
     print(f"total_tokens_M:   {total_tokens / 1e6:.1f}")
     print(f"num_steps:        {step}")
     print(f"num_params_M:     {num_params / 1e6:.1f}")
-    print(f"depth:            {DEPTH}")
+    print(f"depth:            {depth}")
     print(f"dataset:          {tokenizer.dataset}")
     print(f"train_batch_size: {chosen_train_batch}")
     print(f"eval_batch_size:  {chosen_eval_batch}")

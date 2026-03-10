@@ -1,2 +1,3 @@
 commit	val_bpb	memory_gb	status	description
 46294df	1.228006	1.7	keep	baseline
+70a4278	1.227179	1.7	discard	torch.compile on Linux: no throughput gain (same 12% MFU)
