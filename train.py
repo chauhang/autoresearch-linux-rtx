@@ -145,7 +145,7 @@ def _resolve_gpu_profile(gpu_name, capability, gpu_vram_gb, is_windows):
                 name=mid_tier_name,
                 is_supported_consumer=True,
                 is_compatibility_only=False,
-                train_batch_candidates=(64, 32, 16, 8, 4),
+                train_batch_candidates=(32, 16, 8, 4),
                 checkpoint_modes=(True,),
                 default_checkpointing=True,
             )
@@ -789,7 +789,7 @@ class MuonAdamW(torch.optim.Optimizer):
 # Model architecture
 ASPECT_RATIO = 64         # model_dim = depth * ASPECT_RATIO
 HEAD_DIM = 128            # target head dimension for attention
-WINDOW_PATTERN = "SSSL"   # sliding window pattern: L=full, S=half context
+WINDOW_PATTERN = "SL"     # sliding window pattern: L=full, S=half context
 
 # Optimization
 TOTAL_BATCH_SIZE = 2 ** 19
@@ -800,7 +800,7 @@ SCALAR_LR = 0.5
 WEIGHT_DECAY = 0.2
 ADAM_BETAS = (0.8, 0.95)
 WARMUP_RATIO = 0.0
-WARMDOWN_RATIO = 0.05
+WARMDOWN_RATIO = 0.1
 FINAL_LR_FRAC = 0.0
 
 # Model size + memory defaults

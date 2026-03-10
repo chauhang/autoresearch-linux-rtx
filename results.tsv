@@ -11,3 +11,5 @@ c4f7175	0.751611	2.2	keep	WARMDOWN=0.1 DEPTH=3 GPU0
 c4f7175	0.707381	2.1	keep	WARMDOWN=0.1 DEPTH=2 GPU1 (best: 137 steps)
 e558ac8	0.704718	8.2	keep	DEPTH=2 WARMDOWN=0.1 batch=32 GPU0 (after ollama stop)
 e558ac8	0.701946	8.2	keep	DEPTH=2 WARMDOWN=0.1 batch=32 GPU1 (new best: 141 steps 227K t/s)
+b28edc8	0.703671	8.2	discard	DEPTH=2 WARMDOWN=0.05 GPU0 (worse than 0.1)
+b28edc8	0.749942	8.2	discard	DEPTH=1 WARMDOWN=0.05 GPU1 (178 steps but capacity too low)
