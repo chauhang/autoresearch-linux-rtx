@@ -1202,6 +1202,7 @@ def main():
     parser.add_argument("--aspect-ratio", type=int, default=None, help="Override ASPECT_RATIO (n_embd = depth * aspect_ratio, rounded up to HEAD_DIM multiple).")
     parser.add_argument("--matrix-lr", type=float, default=None, help="Override MATRIX_LR.")
     parser.add_argument("--embedding-lr", type=float, default=None, help="Override EMBEDDING_LR.")
+    parser.add_argument("--weight-decay", type=float, default=None, help="Override WEIGHT_DECAY.")
     args = parser.parse_args()
     depth = args.depth if args.depth is not None else DEPTH
     if args.aspect_ratio is not None:
@@ -1213,6 +1214,9 @@ def main():
     if args.embedding_lr is not None:
         global EMBEDDING_LR
         EMBEDDING_LR = args.embedding_lr
+    if args.weight_decay is not None:
+        global WEIGHT_DECAY
+        WEIGHT_DECAY = args.weight_decay
 
     runtime = detect_runtime()
     print(f"GPU: {runtime.gpu_name}")
