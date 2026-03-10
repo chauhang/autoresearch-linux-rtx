@@ -1201,6 +1201,7 @@ def main():
     parser.add_argument("--depth", type=int, default=None, help="Override model depth (number of layers).")
     parser.add_argument("--aspect-ratio", type=int, default=None, help="Override ASPECT_RATIO (n_embd = depth * aspect_ratio, rounded up to HEAD_DIM multiple).")
     parser.add_argument("--matrix-lr", type=float, default=None, help="Override MATRIX_LR.")
+    parser.add_argument("--embedding-lr", type=float, default=None, help="Override EMBEDDING_LR.")
     args = parser.parse_args()
     depth = args.depth if args.depth is not None else DEPTH
     if args.aspect_ratio is not None:
@@ -1209,6 +1210,9 @@ def main():
     if args.matrix_lr is not None:
         global MATRIX_LR
         MATRIX_LR = args.matrix_lr
+    if args.embedding_lr is not None:
+        global EMBEDDING_LR
+        EMBEDDING_LR = args.embedding_lr
 
     runtime = detect_runtime()
     print(f"GPU: {runtime.gpu_name}")
