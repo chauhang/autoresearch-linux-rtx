@@ -795,7 +795,7 @@ WINDOW_PATTERN = "SSSL"   # sliding window pattern: L=full, S=half context
 TOTAL_BATCH_SIZE = 2 ** 19
 EMBEDDING_LR = 0.6
 UNEMBEDDING_LR = 0.004
-MATRIX_LR = 0.06
+MATRIX_LR = 0.08
 SCALAR_LR = 0.5
 WEIGHT_DECAY = 0.2
 ADAM_BETAS = (0.8, 0.95)
@@ -1199,8 +1199,16 @@ def main():
     parser.add_argument("--smoke-test", action="store_true", help="Run a short train/eval pass for validation.")
     parser.add_argument("--dataset", choices=DATASET_CHOICES, default=None, help="Optional dataset override.")
     parser.add_argument("--depth", type=int, default=None, help="Override model depth (number of layers).")
+    parser.add_argument("--aspect-ratio", type=int, default=None, help="Override ASPECT_RATIO (n_embd = depth * aspect_ratio, rounded up to HEAD_DIM multiple).")
+    parser.add_argument("--matrix-lr", type=float, default=None, help="Override MATRIX_LR.")
     args = parser.parse_args()
     depth = args.depth if args.depth is not None else DEPTH
+    if args.aspect_ratio is not None:
+        global ASPECT_RATIO
+        ASPECT_RATIO = args.aspect_ratio
+    if args.matrix_lr is not None:
+        global MATRIX_LR
+        MATRIX_LR = args.matrix_lr
 
     runtime = detect_runtime()
     print(f"GPU: {runtime.gpu_name}")
