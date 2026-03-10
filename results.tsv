@@ -25,3 +25,5 @@ cc1f947	0.692597	8.5	discard	DEPTH=3 n_embd=256 LR=0.06 GPU1 (76 steps fewer tok
 9c234f3	0.681724	8.4	discard	EMBEDDING_LR=0.3 GPU1 (worse than 0.6)
 ee52d4d	0.684673	8.4	discard	ADAM_BETAS beta1=0.9 GPU0 (beta1=0.8 is better)
 ee52d4d	0.738215	4.4	discard	n_embd=384 ASPECT_RATIO=192 GPU1 (72 steps too few)
+b1cdca8	0.672712	8.4	keep	WARMDOWN=0.15 GPU0 (new best)
+b1cdca8	0.677480	4.2	discard	WARMDOWN=0.15 WD=0.1 GPU1 (batch=16 stale cache confounds)
