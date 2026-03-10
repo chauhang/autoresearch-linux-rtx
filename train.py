@@ -145,7 +145,7 @@ def _resolve_gpu_profile(gpu_name, capability, gpu_vram_gb, is_windows):
                 name=mid_tier_name,
                 is_supported_consumer=True,
                 is_compatibility_only=False,
-                train_batch_candidates=(16, 8, 4),
+                train_batch_candidates=(32, 16, 8, 4),
                 checkpoint_modes=(True,),
                 default_checkpointing=True,
             )
@@ -804,7 +804,7 @@ WARMDOWN_RATIO = 0.5
 FINAL_LR_FRAC = 0.0
 
 # Model size + memory defaults
-DEPTH = 6
+DEPTH = 4
 DEVICE_BATCH_SIZE = 16
 EVAL_BATCH_SIZE = 8
 

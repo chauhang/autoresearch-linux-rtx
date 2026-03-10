@@ -1,3 +1,5 @@
 commit	val_bpb	memory_gb	status	description
 46294df	1.228006	1.7	keep	baseline
 70a4278	1.227179	1.7	discard	torch.compile on Linux: no throughput gain (same 12% MFU)
+0bb1b3c	1.028962	1.4	keep	DEPTH=6: 36 steps 18.9M tokens 42K tok/sec
+0bb1b3c	0.794208	2.3	keep	DEPTH=4 (--depth 4): 62 steps 32.5M tokens 89K tok/sec
