@@ -792,6 +792,7 @@ class MuonAdamW(torch.optim.Optimizer):
 ASPECT_RATIO = 96         # model_dim = depth * ASPECT_RATIO
 HEAD_DIM = 64             # target head dimension for attention
 FFN_EXPANSION = 4         # FFN hidden = FFN_EXPANSION * n_embd
+KV_HEADS = None           # None = same as n_heads (full MHA); set <n_heads for GQA/MQA
 WINDOW_PATTERN = "SSSL"   # sliding window pattern: L=full, S=half context
 
 # Optimization
@@ -818,12 +819,13 @@ def build_model_config(depth, vocab_size, runtime, use_activation_checkpointing=
     base_dim = depth * ASPECT_RATIO
     model_dim = ((base_dim + HEAD_DIM - 1) // HEAD_DIM) * HEAD_DIM
     num_heads = model_dim // HEAD_DIM
+    num_kv_heads = KV_HEADS if KV_HEADS is not None else num_heads
     return GPTConfig(
         sequence_len=MAX_SEQ_LEN,
         vocab_size=vocab_size,
         n_layer=depth,
         n_head=num_heads,
-        n_kv_head=num_heads,
+        n_kv_head=num_kv_heads,
         n_embd=model_dim,
         ffn_expansion=FFN_EXPANSION,
         window_pattern=WINDOW_PATTERN,
@@ -1212,6 +1214,7 @@ def main():
     parser.add_argument("--scalar-lr", type=float, default=None, help="Override SCALAR_LR (LayerNorm/bias params).")
     parser.add_argument("--head-dim", type=int, default=None, help="Override HEAD_DIM.")
     parser.add_argument("--ffn-expansion", type=int, default=None, help="Override FFN_EXPANSION (FFN hidden = expansion * n_embd).")
+    parser.add_argument("--kv-heads", type=int, default=None, help="Override KV_HEADS (None=MHA; 1=MQA; <n_heads=GQA).")
     args = parser.parse_args()
     depth = args.depth if args.depth is not None else DEPTH
     if args.aspect_ratio is not None:
@@ -1241,6 +1244,9 @@ def main():
     if args.ffn_expansion is not None:
         global FFN_EXPANSION
         FFN_EXPANSION = args.ffn_expansion
+    if args.kv_heads is not None:
+        global KV_HEADS
+        KV_HEADS = args.kv_heads
 
     runtime = detect_runtime()
     print(f"GPU: {runtime.gpu_name}")
