@@ -1215,6 +1215,7 @@ def main():
     parser.add_argument("--head-dim", type=int, default=None, help="Override HEAD_DIM.")
     parser.add_argument("--ffn-expansion", type=int, default=None, help="Override FFN_EXPANSION (FFN hidden = expansion * n_embd).")
     parser.add_argument("--kv-heads", type=int, default=None, help="Override KV_HEADS (None=MHA; 1=MQA; <n_heads=GQA).")
+    parser.add_argument("--total-batch-size", type=int, default=None, help="Override TOTAL_BATCH_SIZE (tokens per optimizer step).")
     args = parser.parse_args()
     depth = args.depth if args.depth is not None else DEPTH
     if args.aspect_ratio is not None:
@@ -1247,6 +1248,9 @@ def main():
     if args.kv_heads is not None:
         global KV_HEADS
         KV_HEADS = args.kv_heads
+    if args.total_batch_size is not None:
+        global TOTAL_BATCH_SIZE
+        TOTAL_BATCH_SIZE = args.total_batch_size
 
     runtime = detect_runtime()
     print(f"GPU: {runtime.gpu_name}")
