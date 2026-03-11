@@ -796,7 +796,7 @@ KV_HEADS = None           # None = same as n_heads (full MHA); set <n_heads for 
 WINDOW_PATTERN = "SSSL"   # sliding window pattern: L=full, S=half context
 
 # Optimization
-TOTAL_BATCH_SIZE = 2 ** 19
+TOTAL_BATCH_SIZE = 2 ** 17
 EMBEDDING_LR = 0.6
 UNEMBEDDING_LR = 0.004
 MATRIX_LR = 0.08
