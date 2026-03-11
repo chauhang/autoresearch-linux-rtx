@@ -319,6 +319,7 @@ class GPTConfig:
     n_head: int = 6
     n_kv_head: int = 6
     n_embd: int = 768
+    ffn_expansion: int = 4
     window_pattern: str = "SSSL"
     attention_backend: str = "sdpa"
     use_activation_checkpointing: bool = False
@@ -413,8 +414,9 @@ class CausalSelfAttention(nn.Module):
 class MLP(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.c_fc = nn.Linear(config.n_embd, 4 * config.n_embd, bias=False)
-        self.c_proj = nn.Linear(4 * config.n_embd, config.n_embd, bias=False)
+        hidden = config.ffn_expansion * config.n_embd
+        self.c_fc = nn.Linear(config.n_embd, hidden, bias=False)
+        self.c_proj = nn.Linear(hidden, config.n_embd, bias=False)
 
     def forward(self, x):
         x = self.c_fc(x)
@@ -789,6 +791,7 @@ class MuonAdamW(torch.optim.Optimizer):
 # Model architecture
 ASPECT_RATIO = 128        # model_dim = depth * ASPECT_RATIO
 HEAD_DIM = 128            # target head dimension for attention
+FFN_EXPANSION = 4         # FFN hidden = FFN_EXPANSION * n_embd
 WINDOW_PATTERN = "SSSL"   # sliding window pattern: L=full, S=half context
 
 # Optimization
@@ -822,6 +825,7 @@ def build_model_config(depth, vocab_size, runtime, use_activation_checkpointing=
         n_head=num_heads,
         n_kv_head=num_heads,
         n_embd=model_dim,
+        ffn_expansion=FFN_EXPANSION,
         window_pattern=WINDOW_PATTERN,
         attention_backend=runtime.attention_backend,
         use_activation_checkpointing=use_activation_checkpointing,
@@ -1206,6 +1210,8 @@ def main():
     parser.add_argument("--warmdown-ratio", type=float, default=None, help="Override WARMDOWN_RATIO.")
     parser.add_argument("--warmup-ratio", type=float, default=None, help="Override WARMUP_RATIO.")
     parser.add_argument("--scalar-lr", type=float, default=None, help="Override SCALAR_LR (LayerNorm/bias params).")
+    parser.add_argument("--head-dim", type=int, default=None, help="Override HEAD_DIM.")
+    parser.add_argument("--ffn-expansion", type=int, default=None, help="Override FFN_EXPANSION (FFN hidden = expansion * n_embd).")
     args = parser.parse_args()
     depth = args.depth if args.depth is not None else DEPTH
     if args.aspect_ratio is not None:
@@ -1229,6 +1235,12 @@ def main():
     if args.scalar_lr is not None:
         global SCALAR_LR
         SCALAR_LR = args.scalar_lr
+    if args.head_dim is not None:
+        global HEAD_DIM
+        HEAD_DIM = args.head_dim
+    if args.ffn_expansion is not None:
+        global FFN_EXPANSION
+        FFN_EXPANSION = args.ffn_expansion
 
     runtime = detect_runtime()
     print(f"GPU: {runtime.gpu_name}")
