@@ -51,3 +51,5 @@ ec4c066	0.572520	8.3	discard	WARMDOWN=0.05 2^16 GPU1 (0.15 still best at 939 ste
 040136f	0.559632	8.3	keep	WARMDOWN=0.25 2^16 GPU1 (better than 0.15 at 939 steps)
 7e6c688	0.545657	4.3	keep	n_embd=256 WARMDOWN=0.25 GPU0 (1529 steps new best)
 7e6c688	0.537454	4.3	keep	n_embd=320 AR=160 WARMDOWN=0.25 GPU1 (1293 steps 42M tok BEST)
+f88ab0c	0.534312	4.3	keep	n_embd=384 AR=192 GPU0 (1136 steps 37M tok NEW BEST)
+f88ab0c	0.535925	4.4	discard	n_embd=448 AR=224 GPU1 (968 steps; 384 is better)
