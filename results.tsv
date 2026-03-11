@@ -49,3 +49,5 @@ ec4c066	0.563205	4.2	keep	TOTAL_BATCH=2^15 GPU0 (1832 steps 60M tok; same as 2^1
 ec4c066	0.572520	8.3	discard	WARMDOWN=0.05 2^16 GPU1 (0.15 still best at 939 steps)
 040136f	0.550721	4.3	keep	n_embd=256 AR=128 2^15 GPU0 (1549 steps 50M tok NEW BEST)
 040136f	0.559632	8.3	keep	WARMDOWN=0.25 2^16 GPU1 (better than 0.15 at 939 steps)
+7e6c688	0.545657	4.3	keep	n_embd=256 WARMDOWN=0.25 GPU0 (1529 steps new best)
+7e6c688	0.537454	4.3	keep	n_embd=320 AR=160 WARMDOWN=0.25 GPU1 (1293 steps 42M tok BEST)
