@@ -1216,6 +1216,8 @@ def main():
     parser.add_argument("--ffn-expansion", type=int, default=None, help="Override FFN_EXPANSION (FFN hidden = expansion * n_embd).")
     parser.add_argument("--kv-heads", type=int, default=None, help="Override KV_HEADS (None=MHA; 1=MQA; <n_heads=GQA).")
     parser.add_argument("--total-batch-size", type=int, default=None, help="Override TOTAL_BATCH_SIZE (tokens per optimizer step).")
+    parser.add_argument("--final-lr-frac", type=float, default=None, help="Override FINAL_LR_FRAC (residual LR at end of cooldown).")
+    parser.add_argument("--adam-beta2", type=float, default=None, help="Override beta2 in ADAM_BETAS.")
     args = parser.parse_args()
     depth = args.depth if args.depth is not None else DEPTH
     if args.aspect_ratio is not None:
@@ -1251,6 +1253,12 @@ def main():
     if args.total_batch_size is not None:
         global TOTAL_BATCH_SIZE
         TOTAL_BATCH_SIZE = args.total_batch_size
+    if args.final_lr_frac is not None:
+        global FINAL_LR_FRAC
+        FINAL_LR_FRAC = args.final_lr_frac
+    if args.adam_beta2 is not None:
+        global ADAM_BETAS
+        ADAM_BETAS = (ADAM_BETAS[0], args.adam_beta2)
 
     runtime = detect_runtime()
     print(f"GPU: {runtime.gpu_name}")
