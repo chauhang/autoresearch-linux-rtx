@@ -789,7 +789,7 @@ class MuonAdamW(torch.optim.Optimizer):
 # ---------------------------------------------------------------------------
 
 # Model architecture
-ASPECT_RATIO = 192        # model_dim = depth * ASPECT_RATIO
+ASPECT_RATIO = 96         # model_dim = depth * ASPECT_RATIO
 HEAD_DIM = 64             # target head dimension for attention
 FFN_EXPANSION = 4         # FFN hidden = FFN_EXPANSION * n_embd
 KV_HEADS = None           # None = same as n_heads (full MHA); set <n_heads for GQA/MQA
@@ -808,7 +808,7 @@ WARMDOWN_RATIO = 0.60
 FINAL_LR_FRAC = 0.0
 
 # Model size + memory defaults
-DEPTH = 2
+DEPTH = 3
 DEVICE_BATCH_SIZE = 16
 EVAL_BATCH_SIZE = 8
 
