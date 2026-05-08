@@ -332,6 +332,8 @@ def norm(x):
 
 def has_ve(layer_idx, n_layer):
     """Returns True if layer should have Value Embedding (alternating, last always included)."""
+    if not USE_VE:
+        return False
     return layer_idx % 2 == (n_layer - 1) % 2
 
 
@@ -793,6 +795,7 @@ ASPECT_RATIO = 96         # model_dim = depth * ASPECT_RATIO
 HEAD_DIM = 64             # target head dimension for attention
 FFN_EXPANSION = 4         # FFN hidden = FFN_EXPANSION * n_embd
 KV_HEADS = None           # None = same as n_heads (full MHA); set <n_heads for GQA/MQA
+USE_VE = True             # enable/disable value embeddings
 WINDOW_PATTERN = "SSSL"   # sliding window pattern: L=full, S=half context
 
 # Optimization
@@ -1215,6 +1218,7 @@ def main():
     parser.add_argument("--head-dim", type=int, default=None, help="Override HEAD_DIM.")
     parser.add_argument("--ffn-expansion", type=int, default=None, help="Override FFN_EXPANSION (FFN hidden = expansion * n_embd).")
     parser.add_argument("--kv-heads", type=int, default=None, help="Override KV_HEADS (None=MHA; 1=MQA; <n_heads=GQA).")
+    parser.add_argument("--no-ve", action="store_true", help="Disable value embeddings.")
     parser.add_argument("--total-batch-size", type=int, default=None, help="Override TOTAL_BATCH_SIZE (tokens per optimizer step).")
     parser.add_argument("--final-lr-frac", type=float, default=None, help="Override FINAL_LR_FRAC (residual LR at end of cooldown).")
     parser.add_argument("--adam-beta2", type=float, default=None, help="Override beta2 in ADAM_BETAS.")
@@ -1259,6 +1263,9 @@ def main():
     if args.adam_beta2 is not None:
         global ADAM_BETAS
         ADAM_BETAS = (ADAM_BETAS[0], args.adam_beta2)
+    if args.no_ve:
+        global USE_VE
+        USE_VE = False
 
     runtime = detect_runtime()
     print(f"GPU: {runtime.gpu_name}")
