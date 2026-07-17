@@ -2,7 +2,7 @@
 
 > Convert your gaming PC into an autonomous AI researcher.
 
-> This repository is a fork of [karpathy/autoresearch](https://github.com/karpathy/autoresearch). The purpose of this fork is native support for desktop consumer NVIDIA GPUs on Windows, with tiered VRAM floors by architecture.
+> This repository is a fork of [karpathy/autoresearch](https://github.com/karpathy/autoresearch). The purpose of this fork is native support for desktop consumer NVIDIA GPUs on Ubuntu, with tiered VRAM floors by architecture.
 
 ![teaser](progress.png)
 
